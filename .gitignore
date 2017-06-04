@@ -1,0 +1,9 @@
+.idea
+*.iml
+target/
+.metadata/
+.settings/
+/.classpath
+/.project
+text.txt
+.idea/workspace.xml
