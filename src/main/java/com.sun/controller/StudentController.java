@@ -21,21 +21,21 @@ public class StudentController {
     @Autowired
     private StudentService studentService;
 
-    @RequestMapping("/selectStu")
+    @RequestMapping("/get")
     @ResponseBody
-    Student getStu1() throws Exception {
-        return studentService.getStu1(1);
+    Student get() throws Exception {
+        return studentService.getStu(1);
     }
 
-    @RequestMapping("/addStu")
+    @RequestMapping("/save")
     @ResponseBody
-    String stuAdd1() throws Exception {
+    String save() throws Exception {
         Student student = Student.builder().name("test1").birth("2011-11-11").address("beijing").sex(1).build();
-        studentService.insert1(student);
+        studentService.save(student);
         return "添加成功";
     }
 
-    @RequestMapping("/batchInsertStu")
+    @RequestMapping("/batchInsert")
     @ResponseBody
     String batchInsert() throws Exception {
         List<Student> studentList = new ArrayList<>();
