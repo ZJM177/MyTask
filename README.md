@@ -1,2 +1,2 @@
 # sun-members
-sun项目，会员管理
+sun会员管理
