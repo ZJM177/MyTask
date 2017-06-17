@@ -11,7 +11,7 @@ import java.util.Date;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Student extends AbstractEntity {
+public class Student {
     private Integer id;
 
     private String name;
