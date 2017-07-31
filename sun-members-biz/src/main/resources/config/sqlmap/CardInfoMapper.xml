@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sun.members.dao.CardInfoDao">
+  <resultMap id="BaseResultMap" type="com.sun.members.entity.CardInfo">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="member_id" jdbcType="INTEGER" property="memberId" />
+    <result column="card_code" jdbcType="VARCHAR" property="cardCode" />
+    <result column="register_time" jdbcType="TIMESTAMP" property="registerTime" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="lock_time" jdbcType="TIMESTAMP" property="lockTime" />
+    <result column="level" jdbcType="VARCHAR" property="level" />
+    <result column="balance" jdbcType="DECIMAL" property="balance" />
+    <result column="discount" jdbcType="DECIMAL" property="discount" />
+    <result column="point" jdbcType="DECIMAL" property="point" />
+    <result column="card_color" jdbcType="VARCHAR" property="cardColor" />
+    <result column="remark" jdbcType="LONGVARCHAR" property="remark" />
+  </resultMap>
+  <delete id="delete" parameterType="java.lang.Integer">
+    delete from t_card_info
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.sun.members.entity.CardInfo">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_card_info (member_id, card_code, register_time, 
+      `status`, lock_time, `level`, 
+      balance, discount, point, 
+      card_color, remark)
+    values (#{memberId,jdbcType=INTEGER}, #{cardCode,jdbcType=VARCHAR}, #{registerTime,jdbcType=TIMESTAMP}, 
+      #{status,jdbcType=INTEGER}, #{lockTime,jdbcType=TIMESTAMP}, #{level,jdbcType=VARCHAR}, 
+      #{balance,jdbcType=DECIMAL}, #{discount,jdbcType=DECIMAL}, #{point,jdbcType=DECIMAL}, 
+      #{cardColor,jdbcType=VARCHAR}, #{remark,jdbcType=LONGVARCHAR})
+  </insert>
+  <update id="update" parameterType="com.sun.members.entity.CardInfo">
+    update t_card_info
+    set member_id = #{memberId,jdbcType=INTEGER},
+      card_code = #{cardCode,jdbcType=VARCHAR},
+      register_time = #{registerTime,jdbcType=TIMESTAMP},
+      `status` = #{status,jdbcType=INTEGER},
+      lock_time = #{lockTime,jdbcType=TIMESTAMP},
+      `level` = #{level,jdbcType=VARCHAR},
+      balance = #{balance,jdbcType=DECIMAL},
+      discount = #{discount,jdbcType=DECIMAL},
+      point = #{point,jdbcType=DECIMAL},
+      card_color = #{cardColor,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select id, member_id, card_code, register_time, `status`, lock_time, `level`, balance, 
+    discount, point, card_color, remark
+    from t_card_info
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select id, member_id, card_code, register_time, `status`, lock_time, `level`, balance, 
+    discount, point, card_color, remark
+    from t_card_info
+  </select>
+</mapper>

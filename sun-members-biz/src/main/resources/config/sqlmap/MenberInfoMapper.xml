@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sun.members.dao.MenberInfoDao">
+  <resultMap id="BaseResultMap" type="com.sun.members.entity.MenberInfo">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="userName" jdbcType="VARCHAR" property="username" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="mobileNo" jdbcType="VARCHAR" property="mobileno" />
+    <result column="openId" jdbcType="VARCHAR" property="openid" />
+    <result column="gender" jdbcType="INTEGER" property="gender" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="ID_type" jdbcType="INTEGER" property="idType" />
+    <result column="ID_No" jdbcType="VARCHAR" property="idNo" />
+    <result column="remark" jdbcType="LONGVARCHAR" property="remark" />
+  </resultMap>
+  <delete id="delete" parameterType="java.lang.Integer">
+    delete from t_menber_info
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.sun.members.entity.MenberInfo">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_menber_info (userName, `password`, mobileNo, 
+      openId, gender, address, 
+      ID_type, ID_No, remark
+      )
+    values (#{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{mobileno,jdbcType=VARCHAR}, 
+      #{openid,jdbcType=VARCHAR}, #{gender,jdbcType=INTEGER}, #{address,jdbcType=VARCHAR}, 
+      #{idType,jdbcType=INTEGER}, #{idNo,jdbcType=VARCHAR}, #{remark,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <update id="update" parameterType="com.sun.members.entity.MenberInfo">
+    update t_menber_info
+    set userName = #{username,jdbcType=VARCHAR},
+      `password` = #{password,jdbcType=VARCHAR},
+      mobileNo = #{mobileno,jdbcType=VARCHAR},
+      openId = #{openid,jdbcType=VARCHAR},
+      gender = #{gender,jdbcType=INTEGER},
+      address = #{address,jdbcType=VARCHAR},
+      ID_type = #{idType,jdbcType=INTEGER},
+      ID_No = #{idNo,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select id, userName, `password`, mobileNo, openId, gender, address, ID_type, ID_No, 
+    remark
+    from t_menber_info
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select id, userName, `password`, mobileNo, openId, gender, address, ID_type, ID_No, 
+    remark
+    from t_menber_info
+  </select>
+</mapper>
