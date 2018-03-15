@@ -1,5 +1,6 @@
 package com.sun.members.service.impl;
 
+import com.sun.members.dao.UserDao;
 import com.sun.members.service.LoginService;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,10 +13,10 @@ import org.springframework.stereotype.Service;
 @Log4j
 public class LoginServiceImpl implements LoginService {
     @Autowired
-    private StudentMapper studentMapper;
+    private UserDao userDao;
 
     @Override
-    public Student get(int id) {
-        return studentMapper.selectByPrimaryKey(id);
+    public Object get(int id) {
+        return userDao.selectById(id);
     }
 }

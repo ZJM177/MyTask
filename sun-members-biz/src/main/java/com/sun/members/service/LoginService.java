@@ -7,6 +7,6 @@ import com.sun.members.entity.User;
  */
 public interface LoginService {
 
-    User get(int id);
+    Object get(int id);
 
 }
