@@ -1,7 +1,7 @@
 package com.sun.members.service.impl;
 
-import com.sun.members.dao.UserDao;
-import com.sun.members.service.LoginService;
+import com.sun.members.dao.TestDao;
+import com.sun.members.service.TestService;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,12 +11,12 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @Log4j
-public class LoginServiceImpl implements LoginService {
+public class TestServiceImpl implements TestService {
     @Autowired
-    private UserDao userDao;
+    private TestDao testDao;
 
     @Override
     public Object get(int id) {
-        return userDao.selectById(id);
+        return testDao.selectById(id);
     }
 }
