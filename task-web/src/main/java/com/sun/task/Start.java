@@ -16,7 +16,7 @@ import org.springframework.boot.web.support.SpringBootServletInitializer;
 @MapperScan(basePackages="com.sun.task.dao") //扫描Mapper接口
 public class Start extends SpringBootServletInitializer {
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args){
         SpringApplication.run(Start.class, args);
     }
 
