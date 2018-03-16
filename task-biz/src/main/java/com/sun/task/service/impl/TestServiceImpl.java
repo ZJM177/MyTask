@@ -18,6 +18,5 @@ public class TestServiceImpl implements TestService {
     @Override
     public Object get(int id) {
         return testDao.selectById(id);
-
     }
 }

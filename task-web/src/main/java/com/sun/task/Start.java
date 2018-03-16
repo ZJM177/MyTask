@@ -5,6 +5,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
  * Created by pengjikun on 2017/2/15.
@@ -13,6 +14,7 @@ import org.springframework.boot.web.support.SpringBootServletInitializer;
 //@Configuration
 //@EnableAutoConfiguration
 //@ComponentScan
+@EnableScheduling
 @MapperScan(basePackages="com.sun.task.dao") //扫描Mapper接口
 public class Start extends SpringBootServletInitializer {
 
@@ -24,4 +26,5 @@ public class Start extends SpringBootServletInitializer {
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
         return application.sources(Start.class);
     }
+
 }
