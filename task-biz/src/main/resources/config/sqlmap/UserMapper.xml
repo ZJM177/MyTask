@@ -3,7 +3,7 @@
 <mapper namespace="com.sun.task.dao.TestDao">
   <select id="selectById" parameterType="java.lang.Integer" resultType="map">
     select *
-    from tr_student
+    from Busi.SelfPointRecord
     where id = #{id}
   </select>
 

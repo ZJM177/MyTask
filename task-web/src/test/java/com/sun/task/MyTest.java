@@ -1,5 +1,6 @@
 package com.sun.task;
 
+import com.couchbase.client.CouchbaseClient;
 import com.sun.task.service.TestService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,10 +18,23 @@ public class MyTest {
     @Autowired
     private TestService testService;
 
+    @Autowired
+    private CouchbaseClient couchbaseClient;
+
+
     @Test
-    public void test(){
-        Object o = testService.get(1);
-        System.out.println(o);
+    public void get(){
+        Object obj = testService.get(6);
+        System.out.println(obj);
     }
+
+    @Test
+    public void couchbaseTest(){
+        String key = "System:WechatUserInfo:o-Ca7jm22i23B2ZFeEahSyh0pVqA";
+        Object obj = couchbaseClient.get(key);
+        System.out.println(obj);
+    }
+
+
 
 }
