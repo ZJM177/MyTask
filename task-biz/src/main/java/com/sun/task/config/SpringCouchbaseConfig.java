@@ -17,8 +17,11 @@ import com.couchbase.client.CouchbaseConnectionFactoryBuilder;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.convert.ReadingConverter;
+import org.springframework.data.convert.WritingConverter;
 import org.springframework.data.couchbase.cache.CouchbaseCacheManager;
 import org.springframework.data.couchbase.config.AbstractCouchbaseConfiguration;
+import org.springframework.data.couchbase.core.convert.CustomConversions;
 
 import java.util.Arrays;
 import java.util.HashMap;

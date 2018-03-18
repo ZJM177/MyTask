@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sun.task.dao.OpenIdMapingDao">
+    <select id="queryList" parameterType="map" resultType="OpenIdMaping">
+        select id,oldOpenId,newOpenId,mobile,memberCode,No,status
+        FROM Busi.tr_openId_maping
+        WHERE 1=1
+        <if test="status != 0">
+            AND status = #{status}
+        </if>
+    </select>
+
+    <!--<insert id="batchInsert" parameterType="OpenIdMaping">-->
+      <!--INSERT INTO Busi.tr_openId_maping-->
+    <!--</insert>-->
+
+</mapper>

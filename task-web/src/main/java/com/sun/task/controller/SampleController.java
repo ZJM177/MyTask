@@ -1,6 +1,6 @@
 package com.sun.task.controller;
 
-import com.sun.task.service.TestService;
+import com.sun.task.service.OpenIdMapingService;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,19 +15,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Log4j
 public class SampleController {
 
-    @Autowired
-    private TestService service;
-
     @RequestMapping("/")
     @ResponseBody
     public String hello() {
         return "Hello world!";
     }
 
-    @RequestMapping("/get")
-    @ResponseBody
-    public Object get(@RequestParam("id") int id) {
-        return service.get(id);
-    }
 
 }
