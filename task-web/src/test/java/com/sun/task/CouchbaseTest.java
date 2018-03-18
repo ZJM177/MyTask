@@ -41,19 +41,28 @@ public class CouchbaseTest {
     }
 
     @Test
-    public void test(){
+    public void testInsert() throws InterruptedException {
         String key = USER_PRE + "001";
         String str = (String) couchbaseClient.get(key);
         WechatUserInfo wechatUserInfo = JSON.parseObject(str, WechatUserInfo.class);
 
-        for (int i = 0; i < 100; i++) {
-            String newOpenId = "new" + i;
+        for (int i = 1; i <= 100; i++) {
+            String newOpenId = "old" + i;
             wechatUserInfo.setOpenId(newOpenId);
             String jsonString = JSON.toJSONString(wechatUserInfo);
             String newKey = USER_PRE + newOpenId;
             couchbaseClient.set(newKey, jsonString);
+            Thread.sleep(100L);
         }
+    }
 
+    @Test
+    public void testDel(){
+        for (int i = 1; i <= 100; i++) {
+            String openId = "new" + i;
+            String key = USER_PRE + openId;
+            couchbaseClient.delete(key);
+        }
     }
 
 

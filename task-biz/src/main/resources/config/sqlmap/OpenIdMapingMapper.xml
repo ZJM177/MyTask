@@ -10,8 +10,12 @@
         </if>
     </select>
 
-    <!--<insert id="batchInsert" parameterType="OpenIdMaping">-->
-      <!--INSERT INTO Busi.tr_openId_maping-->
-    <!--</insert>-->
+    <insert id="batchInsert" parameterType="OpenIdMaping">
+      INSERT INTO Busi.tr_openId_maping (oldOpenId,newOpenId,mobile,memberCode,status)
+        VALUES
+      <foreach collection="openIdMapings" item="item" separator=",">
+          (#{item.oldOpenId},#{item.newOpenId},#{item.mobile},#{item.memberCode},1)
+      </foreach>
+    </insert>
 
 </mapper>
