@@ -542,7 +542,6 @@ public class WechatUserInfo extends BaseBean {
 				", longitude='" + longitude + '\'' +
 				", latitude='" + latitude + '\'' +
 				", precision='" + precision + '\'' +
-				", headimgurlLocal='" + headimgurlLocal + '\'' +
 				", updateTimeLocation='" + updateTimeLocation + '\'' +
 				", unSubscribetime='" + unSubscribetime + '\'' +
 				", subscribeFlag='" + subscribeFlag + '\'' +
