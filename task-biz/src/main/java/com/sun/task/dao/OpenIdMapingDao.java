@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface OpenIdMapingDao {
     List<OpenIdMaping> queryList(@Param("start")int start,
-                                 @Param("limit")int limit);
+                                 @Param("end")int end);
 
     void batchInsert(@Param("openIdMapings") List<OpenIdMaping> openIdMapings);
 }

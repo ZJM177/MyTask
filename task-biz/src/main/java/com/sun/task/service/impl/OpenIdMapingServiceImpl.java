@@ -30,7 +30,8 @@ public class OpenIdMapingServiceImpl implements OpenIdMapingService {
 
     @Override
     public void changeOpenId(int start, int limit) {
-        List<OpenIdMaping> openIdMapingList = openIdMapingDao.queryList(start, limit);
+        int end = start + limit;
+        List<OpenIdMaping> openIdMapingList = openIdMapingDao.queryList(start, end);
         if (CollectionUtils.isEmpty(openIdMapingList)) {
             return;
         }
@@ -45,7 +46,7 @@ public class OpenIdMapingServiceImpl implements OpenIdMapingService {
             String str = (String) couchbaseClient.get(oldKey);
             if(StringUtils.isEmpty(str)){
                 log.info(String.format("根据openId：%s查询记录为空，将忽略此记录，排序值No：%s", oldOpenId, No));
-                return;
+                continue;
             }
             WechatUserInfo wechatUserInfo = JSON.parseObject(str, WechatUserInfo.class);
 

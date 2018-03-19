@@ -25,7 +25,7 @@ public class OpenIdMapingServiceTest {
 
     @Test
     public void changeOpenId(){
-        openIdMapingService.changeOpenId(1, 1000);
+        openIdMapingService.changeOpenId(10, 10);
     }
 
     @Test

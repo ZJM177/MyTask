@@ -1,10 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.sun.task.dao.OpenIdMapingDao">
+    <sql id="pageheader">
+        <![CDATA[
+
+		]]>
+    </sql>
+    <sql id="pagefooter">
+        <![CDATA[
+			)SORT_T1)SORT_T2 WHERE RowNumber BETWEEN  #{start} AND #{end}
+		]]>
+    </sql>
+
     <select id="queryList" parameterType="map" resultType="OpenIdMaping">
+      SELECT * FROM(SELECT ROW_NUMBER() OVER(ORDER BY No) AS RowNumber, * FROM (
         select id,oldOpenId,newOpenId,mobile,memberCode,No,status
         FROM Busi.tr_openId_maping
-        ORDER BY No
+      )SORT_T1)SORT_T2 WHERE RowNumber BETWEEN  #{start} AND #{end}
     </select>
 
     <insert id="batchInsert" parameterType="OpenIdMaping">
