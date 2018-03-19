@@ -58,7 +58,7 @@ public class OpenIdMapingServiceImpl implements OpenIdMapingService {
             //插入新数据
             couchbaseClient.set(newKey, wechatUserInfoStr);
             //删除原数据
-            couchbaseClient.delete(oldKey);
+//            couchbaseClient.delete(oldKey);
             log.info(String.format("刷新一条成功，oldOpenId：%s，newOpenId：%s，新数据是：%s", oldOpenId, newOpenId, wechatUserInfoStr));
         });
     }

@@ -29,7 +29,7 @@ public class ChangeOpenIdController {
             limit = Integer.MAX_VALUE;
         }
         openIdMapingService.changeOpenId(start, limit);
-        return "Hello world!";
+        return "刷新成功!";
     }
 
 
