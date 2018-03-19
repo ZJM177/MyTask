@@ -25,8 +25,7 @@ public class ChangeOpenIdController {
     public String changeOpenId(@RequestParam("start")int start,
                                @RequestParam("limit")int limit) {
         if(limit == 0){
-            start = 0;
-            limit = Integer.MAX_VALUE;
+            return "本次失败，limit参数必须是正整数";
         }
         openIdMapingService.changeOpenId(start, limit);
         return "刷新成功!";

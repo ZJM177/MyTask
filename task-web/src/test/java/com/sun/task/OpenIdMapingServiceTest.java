@@ -37,6 +37,7 @@ public class OpenIdMapingServiceTest {
                     .oldOpenId("old"+i)
                     .newOpenId("new"+i)
                     .mobile("187"+i)
+                    .No(i)
                     .build();
             openIdMapings.add(openIdMaping);
         }

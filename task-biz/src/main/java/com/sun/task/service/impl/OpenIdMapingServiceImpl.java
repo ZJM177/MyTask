@@ -31,7 +31,7 @@ public class OpenIdMapingServiceImpl implements OpenIdMapingService {
 
     @Override
     public void changeOpenId(int start, int limit) {
-        List<OpenIdMaping> openIdMapingList = openIdMapingDao.queryList(1, start, limit);
+        List<OpenIdMaping> openIdMapingList = openIdMapingDao.queryList(start, limit);
         if (CollectionUtils.isEmpty(openIdMapingList)) {
             return;
         }
@@ -39,12 +39,13 @@ public class OpenIdMapingServiceImpl implements OpenIdMapingService {
         StringBuffer oldBuffer = new StringBuffer();
         StringBuffer newBuffer = new StringBuffer();
         openIdMapingList.stream().forEach(openIdMaping -> {
+            int No = openIdMaping.getNo();
             String oldOpenId = openIdMaping.getOldOpenId();
             oldBuffer.setLength(0);
             String oldKey = oldBuffer.append(USER_PRE).append(oldOpenId).toString();
             String str = (String) couchbaseClient.get(oldKey);
             if(StringUtils.isEmpty(str)){
-                log.info(String.format("根据openId：%s查询记录为空，将忽略此记录", oldOpenId));
+                log.info(String.format("根据openId：%s查询记录为空，将忽略此记录，排序值No：%s", oldOpenId, No));
                 return;
             }
             WechatUserInfo wechatUserInfo = JSON.parseObject(str, WechatUserInfo.class);
@@ -57,9 +58,7 @@ public class OpenIdMapingServiceImpl implements OpenIdMapingService {
             String wechatUserInfoStr = JSON.toJSONString(wechatUserInfo);
             //插入新数据
             couchbaseClient.set(newKey, wechatUserInfoStr);
-            //删除原数据
-//            couchbaseClient.delete(oldKey);
-            log.info(String.format("刷新一条成功，oldOpenId：%s，newOpenId：%s，新数据是：%s", oldOpenId, newOpenId, wechatUserInfoStr));
+            log.info(String.format("刷新一条成功，oldOpenId：%s，newOpenId：%s，排序值No：%s", oldOpenId, newOpenId, No));
         });
     }
 
