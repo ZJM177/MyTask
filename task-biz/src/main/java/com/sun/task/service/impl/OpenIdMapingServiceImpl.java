@@ -44,7 +44,7 @@ public class OpenIdMapingServiceImpl implements OpenIdMapingService {
             oldBuffer.setLength(0);
             String oldKey = oldBuffer.append(USER_PRE).append(oldOpenId).toString();
             String str = (String) couchbaseClient.get(oldKey);
-            if(StringUtils.isEmpty(str)){
+            if (StringUtils.isEmpty(str)) {
                 log.info(String.format("根据openId：%s查询记录为空，将忽略此记录，排序值No：%s", oldOpenId, No));
                 continue;
             }
@@ -65,6 +65,33 @@ public class OpenIdMapingServiceImpl implements OpenIdMapingService {
     @Override
     public void batchInsert(List<OpenIdMaping> openIdMapings) {
         openIdMapingDao.batchInsert(openIdMapings);
+    }
+
+    @Override
+    public String getByOpenId(String openId) {
+        return (String) couchbaseClient.get(USER_PRE + openId);
+    }
+
+    @Override
+    public boolean compareByOpenId(String oldOpenId, String newOpenId) {
+        String oldData = getByOpenId(oldOpenId);
+        String newData = getByOpenId(newOpenId);
+        WechatUserInfo oldUser = JSON.parseObject(oldData, WechatUserInfo.class);
+        WechatUserInfo newUser = JSON.parseObject(newData, WechatUserInfo.class);
+        return this.compare(oldUser, newUser);
+    }
+
+    private boolean compare(WechatUserInfo oldUser, WechatUserInfo newUser) {
+        if (oldUser == null && newUser == null) {
+            log.info("对象为空");
+            return false;
+        }
+        if (StringUtils.isEmpty(oldUser.getOpenId()) || StringUtils.isEmpty(newUser.getOpenId())
+                || oldUser.getOpenId().equals(newUser.getOpenId())) {
+            log.info(String.format("openId为空或两个对象的openId相等,oldOpenId:%s，newOpenId:%s", oldUser.getOpenId(), newUser.getOpenId()));
+            return false;
+        }
+        return oldUser.toString().equals(newUser.toString());
     }
 
 

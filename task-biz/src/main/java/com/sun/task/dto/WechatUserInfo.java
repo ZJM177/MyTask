@@ -516,4 +516,51 @@ public class WechatUserInfo extends BaseBean {
 	public void setExtattr(String extattr) {
 		this.extattr = extattr;
 	}
+
+	@Override
+	public String toString() {
+		return "WechatUserInfo{" +
+				"subscribe='" + subscribe + '\'' +
+				", language='" + language + '\'' +
+				", subscribeTime='" + subscribeTime + '\'' +
+				", nickname='" + nickname + '\'' +
+				", sex='" + sex + '\'' +
+				", province='" + province + '\'' +
+				", city='" + city + '\'' +
+				", country='" + country + '\'' +
+				", headimgurl='" + headimgurl + '\'' +
+				", privilege='" + privilege + '\'' +
+				", userType='" + userType + '\'' +
+				", name='" + name + '\'' +
+				", department='" + department + '\'' +
+				", position='" + position + '\'' +
+				", email='" + email + '\'' +
+				", weixinid='" + weixinid + '\'' +
+				", avatar='" + avatar + '\'' +
+				", status='" + status + '\'' +
+				", extattr='" + extattr + '\'' +
+				", longitude='" + longitude + '\'' +
+				", latitude='" + latitude + '\'' +
+				", precision='" + precision + '\'' +
+				", headimgurlLocal='" + headimgurlLocal + '\'' +
+				", updateTimeLocation='" + updateTimeLocation + '\'' +
+				", unSubscribetime='" + unSubscribetime + '\'' +
+				", subscribeFlag='" + subscribeFlag + '\'' +
+				", cherryBrandCode='" + cherryBrandCode + '\'' +
+				", memberId='" + memberId + '\'' +
+				", memberCode='" + memberCode + '\'' +
+				", memberName='" + memberName + '\'' +
+				", departCode='" + departCode + '\'' +
+				", departName='" + departName + '\'' +
+				", updateTimeWechat='" + updateTimeWechat + '\'' +
+				", updateTimeCherry='" + updateTimeCherry + '\'' +
+				", changablePoint='" + changablePoint + '\'' +
+				", levelCode='" + levelCode + '\'' +
+				", levelName='" + levelName + '\'' +
+				", mobilePhone='" + mobilePhone + '\'' +
+				", bindMemberCodeTime='" + bindMemberCodeTime + '\'' +
+				", lastAccessTime='" + lastAccessTime + '\'' +
+				", subscribeChannel='" + subscribeChannel + '\'' +
+				'}';
+	}
 }
