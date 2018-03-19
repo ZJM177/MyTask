@@ -14,6 +14,7 @@ package com.sun.task.config;
 
 import com.couchbase.client.CouchbaseClient;
 import com.couchbase.client.CouchbaseConnectionFactoryBuilder;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,10 +29,12 @@ import java.util.List;
 @Configuration
 @EnableCaching
 public class SpringCouchbaseConfig extends AbstractCouchbaseConfiguration {
-
-	private String url = "192.168.102.209";
-	private String bucket = "pekon";
-	private String password = "Webon1234";
+    @Value("${custom.couchbase.url}")
+	private String url;
+    @Value("${custom.couchbase.bucket}")
+	private String bucket;
+    @Value("${custom.couchbase.password}")
+	private String password;
 
     @Bean(name = "couchbaseClient")
     public CouchbaseClient couchbaseClient() throws Exception {

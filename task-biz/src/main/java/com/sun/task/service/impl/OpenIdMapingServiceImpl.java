@@ -13,7 +13,6 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Created by pengjikun on 2017/2/15.
@@ -38,7 +37,7 @@ public class OpenIdMapingServiceImpl implements OpenIdMapingService {
 
         StringBuffer oldBuffer = new StringBuffer();
         StringBuffer newBuffer = new StringBuffer();
-        openIdMapingList.stream().forEach(openIdMaping -> {
+        for (OpenIdMaping openIdMaping : openIdMapingList) {
             int No = openIdMaping.getNo();
             String oldOpenId = openIdMaping.getOldOpenId();
             oldBuffer.setLength(0);
@@ -59,7 +58,7 @@ public class OpenIdMapingServiceImpl implements OpenIdMapingService {
             //插入新数据
             couchbaseClient.set(newKey, wechatUserInfoStr);
             log.info(String.format("刷新一条成功，oldOpenId：%s，newOpenId：%s，排序值No：%s", oldOpenId, newOpenId, No));
-        });
+        }
     }
 
     @Override
