@@ -82,7 +82,7 @@ public class OpenIdMapingServiceImpl implements OpenIdMapingService {
     }
 
     private boolean compare(WechatUserInfo oldUser, WechatUserInfo newUser) {
-        if (oldUser == null && newUser == null) {
+        if (oldUser == null || newUser == null) {
             log.info("对象为空");
             return false;
         }

@@ -558,7 +558,6 @@ public class WechatUserInfo extends BaseBean {
 				", levelName='" + levelName + '\'' +
 				", mobilePhone='" + mobilePhone + '\'' +
 				", bindMemberCodeTime='" + bindMemberCodeTime + '\'' +
-				", lastAccessTime='" + lastAccessTime + '\'' +
 				", subscribeChannel='" + subscribeChannel + '\'' +
 				'}';
 	}
