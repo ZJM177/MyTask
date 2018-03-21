@@ -3,16 +3,16 @@ package com.sun.task.controller;
 import com.sun.task.service.OpenIdMapingService;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
 
 /**
  * Created by pengjikun on 2017/2/15.
  */
-@RestController
+@Controller
 @RequestMapping("/task")
 @Log4j
 public class ChangeOpenIdController {
@@ -20,11 +20,16 @@ public class ChangeOpenIdController {
     @Autowired
     private OpenIdMapingService openIdMapingService;
 
+    @RequestMapping("/index")
+    public String index() {
+        return "index";
+    }
+
     @RequestMapping("/changeOpenId")
     @ResponseBody
-    public String changeOpenId(@RequestParam("start")int start,
-                               @RequestParam("limit")int limit) {
-        if(limit == 0){
+    public String changeOpenId(@RequestParam("start") int start,
+                               @RequestParam("limit") int limit) {
+        if (limit == 0) {
             return "本次失败，limit参数必须是正整数";
         }
         openIdMapingService.changeOpenId(start, limit);
@@ -33,8 +38,8 @@ public class ChangeOpenIdController {
 
     @RequestMapping("/getByOpenId")
     @ResponseBody
-    public String getByOpenId(@RequestParam("openId")String openId) {
-        if(StringUtils.isEmpty(openId)){
+    public String getByOpenId(@RequestParam("openId") String openId) {
+        if (StringUtils.isEmpty(openId)) {
             return "openId不允许为空";
         }
         String result = openIdMapingService.getByOpenId(openId);
@@ -43,13 +48,14 @@ public class ChangeOpenIdController {
 
     @RequestMapping("/compareByOpenId")
     @ResponseBody
-    public String compareByOpenId(@RequestParam("oldOpenId")String oldOpenId,
-                                  @RequestParam("newOpenId")String newOpenId) {
-        if(StringUtils.isEmpty(oldOpenId) || StringUtils.isEmpty(newOpenId)){
+    public String compareByOpenId(@RequestParam("oldOpenId") String oldOpenId,
+                                  @RequestParam("newOpenId") String newOpenId) {
+        if (StringUtils.isEmpty(oldOpenId) || StringUtils.isEmpty(newOpenId)) {
             return "oldOpenId和newOpenId都不允许为空";
         }
         boolean compareResult = openIdMapingService.compareByOpenId(oldOpenId, newOpenId);
         return "比较完成，结果是：" + compareResult;
     }
+
 
 }
