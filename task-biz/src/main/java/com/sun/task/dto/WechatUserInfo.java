@@ -354,8 +354,7 @@ public class WechatUserInfo extends BaseBean {
 		this.latitude = latitude;
 	}
 	public String getHeadimgurlLocal() {
-		//return MulberryConfig.getSystemConfig("MulberryRootURL")+headimgurlLocal;
-		return headimgurl;
+		return headimgurlLocal;
 	}
 
 	public void setHeadimgurlLocal(String headimgurlLocal) {
@@ -521,7 +520,6 @@ public class WechatUserInfo extends BaseBean {
 	public String toString() {
 		return "WechatUserInfo{" +
 				"subscribe='" + subscribe + '\'' +
-				", language='" + language + '\'' +
 				", subscribeTime='" + subscribeTime + '\'' +
 				", nickname='" + nickname + '\'' +
 				", sex='" + sex + '\'' +
@@ -529,20 +527,11 @@ public class WechatUserInfo extends BaseBean {
 				", city='" + city + '\'' +
 				", country='" + country + '\'' +
 				", headimgurl='" + headimgurl + '\'' +
-				", privilege='" + privilege + '\'' +
-				", userType='" + userType + '\'' +
 				", name='" + name + '\'' +
 				", department='" + department + '\'' +
 				", position='" + position + '\'' +
 				", email='" + email + '\'' +
-				", weixinid='" + weixinid + '\'' +
-				", avatar='" + avatar + '\'' +
-				", status='" + status + '\'' +
-				", extattr='" + extattr + '\'' +
-				", longitude='" + longitude + '\'' +
-				", latitude='" + latitude + '\'' +
 				", precision='" + precision + '\'' +
-				", updateTimeLocation='" + updateTimeLocation + '\'' +
 				", unSubscribetime='" + unSubscribetime + '\'' +
 				", subscribeFlag='" + subscribeFlag + '\'' +
 				", cherryBrandCode='" + cherryBrandCode + '\'' +
@@ -551,14 +540,7 @@ public class WechatUserInfo extends BaseBean {
 				", memberName='" + memberName + '\'' +
 				", departCode='" + departCode + '\'' +
 				", departName='" + departName + '\'' +
-				", updateTimeWechat='" + updateTimeWechat + '\'' +
-				", updateTimeCherry='" + updateTimeCherry + '\'' +
-				", changablePoint='" + changablePoint + '\'' +
-				", levelCode='" + levelCode + '\'' +
-				", levelName='" + levelName + '\'' +
 				", mobilePhone='" + mobilePhone + '\'' +
-				", bindMemberCodeTime='" + bindMemberCodeTime + '\'' +
-				", subscribeChannel='" + subscribeChannel + '\'' +
 				'}';
 	}
 }

@@ -3,6 +3,7 @@ package com.sun.task.controller;
 import com.sun.task.service.OpenIdMapingService;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,15 +26,14 @@ public class ChangeOpenIdController {
         return "index";
     }
 
-    @RequestMapping("/changeOpenId")
+    @RequestMapping("/transferFansOpenId")
     @ResponseBody
-    public String changeOpenId(@RequestParam("start") int start,
+    public String transferFansOpenId(@RequestParam("start") int start,
                                @RequestParam("limit") int limit) {
         if (limit == 0) {
             return "本次失败，limit参数必须是正整数";
         }
-        openIdMapingService.changeOpenId(start, limit);
-        return "刷新成功!";
+        return openIdMapingService.transferFansOpenId(start, limit);
     }
 
     @RequestMapping("/getByOpenId")
@@ -43,7 +43,7 @@ public class ChangeOpenIdController {
             return "openId不允许为空";
         }
         String result = openIdMapingService.getByOpenId(openId);
-        return "获取完成，结果是：" + result;
+        return "获取完成，\n 结果是：" + result;
     }
 
     @RequestMapping("/compareByOpenId")
@@ -54,8 +54,32 @@ public class ChangeOpenIdController {
             return "oldOpenId和newOpenId都不允许为空";
         }
         boolean compareResult = openIdMapingService.compareByOpenId(oldOpenId, newOpenId);
-        return "比较完成，结果是：" + compareResult;
+        return "比较完成，\n 结果是：" + compareResult;
     }
+
+    @RequestMapping("/transferPointOpenId")
+    @ResponseBody
+    public String transferPointOpenId(@RequestParam("type") int type,
+                                      @RequestParam("start") int start,
+                                     @RequestParam("limit") int limit) {
+        if (limit == 0) {
+            return "本次失败，limit参数必须是正整数";
+        }
+        return openIdMapingService.transferPointOpenId(type, start, limit);
+    }
+
+    @RequestMapping("/transferBookOpenId")
+    @ResponseBody
+    public String transferBookOpenId(@RequestParam("type") int type,
+                                      @RequestParam("start") int start,
+                                      @RequestParam("limit") int limit) {
+        if (limit == 0) {
+            return "本次失败，limit参数必须是正整数";
+        }
+        return openIdMapingService.transferBookOpenId(type, start, limit);
+    }
+
+
 
 
 }

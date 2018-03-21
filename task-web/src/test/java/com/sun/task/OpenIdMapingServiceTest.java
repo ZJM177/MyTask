@@ -1,5 +1,6 @@
 package com.sun.task;
 
+import com.sun.task.dao.OpenIdMapingDao;
 import com.sun.task.dto.OpenIdMaping;
 import com.sun.task.service.OpenIdMapingService;
 import org.junit.Test;
@@ -20,18 +21,20 @@ public class OpenIdMapingServiceTest {
 
     @Autowired
     private OpenIdMapingService openIdMapingService;
+    @Autowired
+    private OpenIdMapingDao openIdMapingDao;
 
 
     @Test
     public void changeOpenId(){
-        openIdMapingService.changeOpenId(0, 10);
+        openIdMapingService.transferFansOpenId(0, 10);
     }
 
     @Test
     public void batchInsert(){
         List<OpenIdMaping> openIdMapings = new ArrayList<>();
         OpenIdMaping openIdMaping;
-        for (int i = 1; i <= 100; i++) {
+        for (int i = 1; i <= 10; i++) {
             openIdMaping = OpenIdMaping.builder()
                     .oldOpenId("old"+i)
                     .newOpenId("new"+i)
@@ -40,7 +43,7 @@ public class OpenIdMapingServiceTest {
                     .build();
             openIdMapings.add(openIdMaping);
         }
-        openIdMapingService.batchInsert(openIdMapings);
+        openIdMapingDao.batchInsert(openIdMapings);
 
     }
 
