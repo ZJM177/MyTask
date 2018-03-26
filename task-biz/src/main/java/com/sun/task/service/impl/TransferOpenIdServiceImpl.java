@@ -161,12 +161,17 @@ public class TransferOpenIdServiceImpl implements TransferOpenIdService {
     }
 
     @Override
-    public String transferKfOpenId() {
-        Date date = new Date();
+    public String transferKfOpenId(Date startDate, int count) {
+        if(startDate == null){
+            startDate = new Date();
+        }
+        if(count == 0){
+            count = kfDays;
+        }
         StringBuffer stf = new StringBuffer();
         String str;
-        for (int i = 0; i <= kfDays; i++) {
-            Date addDateByDays = CommonUtil.addDateByDays(date, -i);
+        for (int i = 0; i <= count; i++) {
+            Date addDateByDays = CommonUtil.addDateByDays(startDate, -i);
             String date2String = CommonUtil.date2String(addDateByDays, "yyyy-MM-dd");
             int j = 0;
             do {

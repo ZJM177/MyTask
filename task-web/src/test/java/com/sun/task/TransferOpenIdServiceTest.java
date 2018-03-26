@@ -58,7 +58,8 @@ public class TransferOpenIdServiceTest {
 
     @Test
     public void transferKfOpenId(){
-        transferOpenIdService.transferKfOpenId();
+        Date date = new Date();
+        transferOpenIdService.transferKfOpenId(date, 100);
     }
 
     @Test

@@ -1,6 +1,7 @@
 package com.sun.task.controller;
 
 import com.sun.task.service.TransferOpenIdService;
+import com.sun.task.util.CommonUtil;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -8,6 +9,8 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.Date;
 
 /**
  * Created by pengjikun on 2017/2/15.
@@ -79,8 +82,13 @@ public class TransferOpenIdController {
 
     @RequestMapping("/transferKfOpenId")
     @ResponseBody
-    public String transferKfOpenId() {
-        return transferOpenIdService.transferKfOpenId();
+    public String transferKfOpenId(@RequestParam(value = "startDate", required = false) String startDate,
+                                   @RequestParam(value = "count", required = false, defaultValue = "0") int count) {
+        Date date = null;
+        if(!StringUtils.isEmpty(startDate)){
+            date = CommonUtil.coverString2Date(startDate);
+        }
+        return transferOpenIdService.transferKfOpenId(date, count);
     }
 
 

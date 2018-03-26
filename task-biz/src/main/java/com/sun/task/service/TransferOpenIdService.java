@@ -2,6 +2,7 @@ package com.sun.task.service;
 
 import com.sun.task.dto.OpenIdMaping;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -50,9 +51,11 @@ public interface TransferOpenIdService {
 
     /**
      * 转换客服交流明细openId
+     * @param startDate 从该日期往之前开始，若空则默认当天
+     * @param count 查询每天的基数，若空则默认配置
      * @return
      */
-    String transferKfOpenId();
+    String transferKfOpenId(Date startDate, int count);
 
     /**
      * 分页取对应关系
