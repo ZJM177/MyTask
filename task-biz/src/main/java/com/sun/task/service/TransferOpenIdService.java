@@ -54,4 +54,25 @@ public interface TransferOpenIdService {
      */
     String transferKfOpenId();
 
+    /**
+     * 分页取对应关系
+     * @param start
+     * @param limit
+     * @return
+     */
+    List<OpenIdMaping> getOpenIdMapingList(int start, int limit);
+
+    /**
+     * 取所有对应关系
+     * @return
+     */
+    List<OpenIdMaping> getOpenIdMapingList();
+
+    /**
+     * 根据旧openId取得新openId
+     * @param oldOpenId
+     * @return
+     */
+    String getNewOpenIdByOldOpenId(String oldOpenId);
+
 }

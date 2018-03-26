@@ -178,11 +178,11 @@ public class TransferOpenIdServiceImpl implements TransferOpenIdService {
                         .append(j)
                         .toString();
                 str = (String) couchbaseClient.get(key);
-                if(!StringUtils.isEmpty(str)){
+                if (!StringUtils.isEmpty(str)) {
                     JSONObject jsonObject = JSON.parseObject(str);
                     String oldOpenId = jsonObject.getString("openId");
                     String newOpenId = getNewOpenIdByOldOpenId(oldOpenId);
-                    if(StringUtils.isEmpty(newOpenId)){
+                    if (StringUtils.isEmpty(newOpenId)) {
                         log.info(String.format("查询openId对应关系为空，将忽略此记录，openId：%s，日期：%s, 当天序号：%s",
                                 oldOpenId, date2String, j));
                         continue;
@@ -217,7 +217,8 @@ public class TransferOpenIdServiceImpl implements TransferOpenIdService {
      * @param limit
      * @return
      */
-    private List<OpenIdMaping> getOpenIdMapingList(int start, int limit){
+    @Override
+    public List<OpenIdMaping> getOpenIdMapingList(int start, int limit){
         int end = start + limit;
         List<OpenIdMaping> openIdMapings = openIdMapingDao.queryList(start, end);
         if (CollectionUtils.isEmpty(openIdMapings)) {
@@ -230,7 +231,7 @@ public class TransferOpenIdServiceImpl implements TransferOpenIdService {
      * 获取所有对应关系
      * @return
      */
-    private List<OpenIdMaping> getOpenIdMapingList(){
+    public List<OpenIdMaping> getOpenIdMapingList(){
         List<OpenIdMaping> openIdMapings = openIdMapingDao.queryListAll();
         if (CollectionUtils.isEmpty(openIdMapings)) {
             return Lists.newArrayList();
@@ -243,7 +244,7 @@ public class TransferOpenIdServiceImpl implements TransferOpenIdService {
      * @param oldOpenId
      * @return
      */
-    private String getNewOpenIdByOldOpenId(String oldOpenId){
+    public String getNewOpenIdByOldOpenId(String oldOpenId){
         if(CollectionUtils.isEmpty(openIdMapingData)){
             List<OpenIdMaping> openIdMapingList = getOpenIdMapingList();
             for (OpenIdMaping openIdMaping : openIdMapingList) {
