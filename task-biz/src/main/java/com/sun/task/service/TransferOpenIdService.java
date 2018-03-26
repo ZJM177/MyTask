@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Created by pengjikun on 2017/2/15.
  */
-public interface OpenIdMapingService {
+public interface TransferOpenIdService {
 
     /**
      * 转换粉丝openId
@@ -33,12 +33,11 @@ public interface OpenIdMapingService {
 
     /**
      * 转换积分兑换记录openId
-     * @param type 区分雅漾和RF
      * @param start
      * @param limit
      * @return
      */
-    String transferPointOpenId(int type, int start, int limit);
+    String transferPointOpenId(int start, int limit);
 
     /**
      * 转换预约记录openId
@@ -48,5 +47,11 @@ public interface OpenIdMapingService {
      * @return
      */
     String transferBookOpenId(int type, int start, int limit);
+
+    /**
+     * 转换客服交流明细openId
+     * @return
+     */
+    String transferKfOpenId();
 
 }

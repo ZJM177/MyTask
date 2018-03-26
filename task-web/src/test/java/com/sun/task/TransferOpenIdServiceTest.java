@@ -2,7 +2,7 @@ package com.sun.task;
 
 import com.sun.task.dao.OpenIdMapingDao;
 import com.sun.task.dto.OpenIdMaping;
-import com.sun.task.service.OpenIdMapingService;
+import com.sun.task.service.TransferOpenIdService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,17 +17,17 @@ import java.util.List;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest()
-public class OpenIdMapingServiceTest {
+public class TransferOpenIdServiceTest {
 
     @Autowired
-    private OpenIdMapingService openIdMapingService;
+    private TransferOpenIdService transferOpenIdService;
     @Autowired
     private OpenIdMapingDao openIdMapingDao;
 
 
     @Test
-    public void changeOpenId(){
-        openIdMapingService.transferFansOpenId(0, 10);
+    public void transferFansOpenId(){
+        transferOpenIdService.transferFansOpenId(0, 10);
     }
 
     @Test
@@ -48,5 +48,9 @@ public class OpenIdMapingServiceTest {
     }
 
 
+    @Test
+    public void transferKfOpenId(){
+        transferOpenIdService.transferKfOpenId();
+    }
 
 }

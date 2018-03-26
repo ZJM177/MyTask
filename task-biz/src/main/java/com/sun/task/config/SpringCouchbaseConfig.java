@@ -41,7 +41,7 @@ public class SpringCouchbaseConfig extends AbstractCouchbaseConfiguration {
         //return super.couchbaseClient();
         CouchbaseConnectionFactoryBuilder ccfb = new CouchbaseConnectionFactoryBuilder();
         //ccfb.setProtocol(Protocol.BINARY);
-        ccfb.setOpTimeout(10000); // wait up to 10 seconds for an operation to
+        ccfb.setOpTimeout(30000); // wait up to 10 seconds for an operation to
         // succeed
         ccfb.setOpQueueMaxBlockTime(5000); // wait up to 5 seconds when trying
         // to enqueue an operation

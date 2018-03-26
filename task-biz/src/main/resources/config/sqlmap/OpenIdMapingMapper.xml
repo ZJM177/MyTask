@@ -27,4 +27,8 @@
       </foreach>
     </insert>
 
+    <select id="queryListAll" parameterType="map" resultType="OpenIdMaping">
+        select id,oldOpenId,newOpenId,mobile,memberCode,No,status
+        FROM Busi.tr_openId_maping
+    </select>
 </mapper>

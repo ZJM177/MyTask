@@ -10,4 +10,6 @@ public interface OpenIdMapingDao {
                                  @Param("end")int end);
 
     void batchInsert(@Param("openIdMapings") List<OpenIdMaping> openIdMapings);
+
+    List<OpenIdMaping> queryListAll();
 }

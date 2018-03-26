@@ -1,43 +1,49 @@
 package com.sun.task.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.couchbase.client.CouchbaseClient;
 import com.google.common.collect.Lists;
 import com.sun.task.dao.OpenIdMapingDao;
 import com.sun.task.dto.OpenIdMaping;
+import com.sun.task.dto.WeChatQaMain;
 import com.sun.task.dto.WechatUserInfo;
 import com.sun.task.enums.TypeEnum;
-import com.sun.task.service.OpenIdMapingService;
+import com.sun.task.service.TransferOpenIdService;
+import com.sun.task.util.CommonUtil;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.beans.factory.config.PropertiesFactoryBean;
-import org.springframework.data.couchbase.core.CouchbaseTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 /**
  * Created by pengjikun on 2017/2/15.
  */
 @Service
 @Log4j
-public class OpenIdMapingServiceImpl implements OpenIdMapingService {
+public class TransferOpenIdServiceImpl implements TransferOpenIdService {
     @Autowired
     private OpenIdMapingDao openIdMapingDao;
     @Autowired
     private CouchbaseClient couchbaseClient;
 
-    @Value("${custom.point.rf.levels}")
-    private String pointRfLevels;
-    @Value("${custom.point.avene.levels}")
-    private String pointAveneLevels;
-    @Value("${custom.book.rf.subCampCode}")
-    private String rfSubCampCode;
-    @Value("${custom.book.avene.subCampCode}")
-    private String aveneSubCampCode;
+    @Value("${custom.point.levels}")
+    private String pointLevels;
+    @Value("${custom.book.subCampCode}")
+    private String subCampCode;
+    @Value("${custom.kf.days}")
+    private int kfDays;
+
+    /**存放新老openId对应关系*/
+    private static Map<String, String> openIdMapingData = new ConcurrentHashMap<>();
 
     private final static String USER_PRE = "System:WechatUserInfo:";
     private final static String POINT_PRE = "1:SubCampIfJoin:";
@@ -69,6 +75,7 @@ public class OpenIdMapingServiceImpl implements OpenIdMapingService {
             String wechatUserInfoStr = JSON.toJSONString(wechatUserInfo);
             //插入新数据
             couchbaseClient.set(newKey, wechatUserInfoStr);
+            couchbaseClient.delete(oldKey);
             log.info(String.format("转换粉丝成功>>>，oldOpenId：%s，newOpenId：%s，排序值No：%s", oldOpenId, newOpenId, No));
         }
         return "转换粉丝成功";
@@ -89,11 +96,10 @@ public class OpenIdMapingServiceImpl implements OpenIdMapingService {
     }
 
     @Override
-    public String transferPointOpenId(int type, int start, int limit) {
-        String levelStr = (type == TypeEnum.AVENE.getType())?pointAveneLevels: pointRfLevels;
-        List<String> levels = JSON.parseArray(levelStr, String.class);
+    public String transferPointOpenId(int start, int limit) {
+        List<String> levels = JSON.parseArray(pointLevels, String.class);
         if(CollectionUtils.isEmpty(levels)){
-            String format = String.format("积分档次配置解析后为空，配置：%s，解析后：%s", levelStr, levels);
+            String format = String.format("积分档次配置解析后为空，配置：%s，解析后：%s", pointLevels, levels);
             log.info(format);
             return format;
         }
@@ -129,7 +135,6 @@ public class OpenIdMapingServiceImpl implements OpenIdMapingService {
          * rf docId格式 1:SubCampOrder:AT1605110000001oCZUluNTz8sVqbsHRy61XG0Uo8hQ
          */
         String bookPre = (type==TypeEnum.AVENE.getType())?AVENE_BOOK_PRE:RF_BOOK_PRE;
-        String subCampCode = (type==TypeEnum.AVENE.getType())?aveneSubCampCode+":":rfSubCampCode;
 
         StringBuffer oldBuffer = new StringBuffer();
         StringBuffer newBuffer = new StringBuffer();
@@ -148,9 +153,48 @@ public class OpenIdMapingServiceImpl implements OpenIdMapingService {
             String newOpenId = openIdMaping.getNewOpenId();
             String newKey = newBuffer.append(bookPre).append(subCampCode).append(newOpenId).toString();
             couchbaseClient.set(newKey, obj);
+            couchbaseClient.delete(oldKey);
             log.info(String.format("转换预约记录成功>>>，oldOpenId：%s，newOpenId：%s，排序值No：%s", oldOpenId, newOpenId, No));
         }
         return "转换预约记录成功！";
+    }
+
+    @Override
+    public String transferKfOpenId() {
+        Date date = new Date();
+        StringBuffer stf = new StringBuffer();
+        String str;
+        for (int i = 0; i <= kfDays; i++) {
+            Date addDateByDays = CommonUtil.addDateByDays(date, -i);
+            String date2String = CommonUtil.date2String(addDateByDays, "yyyy-MM-dd");
+            int j = 0;
+            do {
+                j += 1;
+                stf.setLength(0);
+                String key = stf.append("1:WeChatQaMain:")
+                        .append(date2String)
+                        .append(":")
+                        .append(j)
+                        .toString();
+                str = (String) couchbaseClient.get(key);
+                if(!StringUtils.isEmpty(str)){
+                    JSONObject jsonObject = JSON.parseObject(str);
+                    String oldOpenId = jsonObject.getString("openId");
+                    String newOpenId = getNewOpenIdByOldOpenId(oldOpenId);
+                    if(StringUtils.isEmpty(newOpenId)){
+                        log.info(String.format("查询openId对应关系为空，将忽略此记录，openId：%s，日期：%s, 序号：%s",
+                                oldOpenId, date2String, j));
+                        continue;
+                    }
+                    jsonObject.put("openId", newOpenId);
+                    String jsonString = JSON.toJSONString(jsonObject);
+                    couchbaseClient.set(key, jsonString);
+                    log.info(String.format("转换客服聊天记录成功>>>，oldOpenId：%s，newOpenId：%s，日期：%s, 序号：%s",
+                            oldOpenId, newOpenId, date2String, j));
+                }
+            } while (str != null);
+        }
+        return "更新客服数据成功";
     }
 
     private boolean compare(WechatUserInfo oldUser, WechatUserInfo newUser) {
@@ -174,11 +218,38 @@ public class OpenIdMapingServiceImpl implements OpenIdMapingService {
      */
     private List<OpenIdMaping> getOpenIdMapingList(int start, int limit){
         int end = start + limit;
-        List<OpenIdMaping> openIdMapingList = openIdMapingDao.queryList(start, end);
-        if (CollectionUtils.isEmpty(openIdMapingList)) {
+        List<OpenIdMaping> openIdMapings = openIdMapingDao.queryList(start, end);
+        if (CollectionUtils.isEmpty(openIdMapings)) {
             return Lists.newArrayList();
         }
-        return openIdMapingList;
+        return openIdMapings;
+    }
+
+    /**
+     * 获取所有对应关系
+     * @return
+     */
+    private List<OpenIdMaping> getOpenIdMapingList(){
+        List<OpenIdMaping> openIdMapings = openIdMapingDao.queryListAll();
+        if (CollectionUtils.isEmpty(openIdMapings)) {
+            return Lists.newArrayList();
+        }
+        return openIdMapings;
+    }
+
+    /**
+     * 获取对应关系
+     * @param oldOpenId
+     * @return
+     */
+    private String getNewOpenIdByOldOpenId(String oldOpenId){
+        if(CollectionUtils.isEmpty(openIdMapingData)){
+            List<OpenIdMaping> openIdMapingList = getOpenIdMapingList();
+            for (OpenIdMaping openIdMaping : openIdMapingList) {
+                this.openIdMapingData.put(openIdMaping.getOldOpenId(), openIdMaping.getNewOpenId());
+            }
+        }
+        return openIdMapingData.get(oldOpenId);
     }
 
 
