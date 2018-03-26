@@ -135,6 +135,7 @@ public class TransferOpenIdServiceImpl implements TransferOpenIdService {
          * rf docId格式 1:SubCampOrder:AT1605110000001oCZUluNTz8sVqbsHRy61XG0Uo8hQ
          */
         String bookPre = (type==TypeEnum.AVENE.getType())?AVENE_BOOK_PRE:RF_BOOK_PRE;
+        String subCampCode = (type==TypeEnum.AVENE.getType())?this.subCampCode+":":this.subCampCode;
 
         StringBuffer oldBuffer = new StringBuffer();
         StringBuffer newBuffer = new StringBuffer();
@@ -182,14 +183,14 @@ public class TransferOpenIdServiceImpl implements TransferOpenIdService {
                     String oldOpenId = jsonObject.getString("openId");
                     String newOpenId = getNewOpenIdByOldOpenId(oldOpenId);
                     if(StringUtils.isEmpty(newOpenId)){
-                        log.info(String.format("查询openId对应关系为空，将忽略此记录，openId：%s，日期：%s, 序号：%s",
+                        log.info(String.format("查询openId对应关系为空，将忽略此记录，openId：%s，日期：%s, 当天序号：%s",
                                 oldOpenId, date2String, j));
                         continue;
                     }
                     jsonObject.put("openId", newOpenId);
                     String jsonString = JSON.toJSONString(jsonObject);
                     couchbaseClient.set(key, jsonString);
-                    log.info(String.format("转换客服聊天记录成功>>>，oldOpenId：%s，newOpenId：%s，日期：%s, 序号：%s",
+                    log.info(String.format("转换客服聊天记录成功>>>，oldOpenId：%s，newOpenId：%s，日期：%s, 当天序号：%s",
                             oldOpenId, newOpenId, date2String, j));
                 }
             } while (str != null);
