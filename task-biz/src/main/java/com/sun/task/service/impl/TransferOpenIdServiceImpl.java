@@ -7,7 +7,6 @@ import com.google.common.collect.Lists;
 import com.sun.task.dao.OpenIdMapingDao;
 import com.sun.task.dto.OpenIdMaping;
 import com.sun.task.dto.WechatUserInfo;
-import com.sun.task.enums.TypeEnum;
 import com.sun.task.service.TransferOpenIdService;
 import com.sun.task.util.CommonUtil;
 import lombok.extern.log4j.Log4j;
@@ -61,14 +60,14 @@ public class TransferOpenIdServiceImpl implements TransferOpenIdService {
                 log.info(String.format("查询粉丝记录为空，将忽略此记录，openId：%s，排序值No：%s", oldOpenId, No));
                 continue;
             }
-            WechatUserInfo wechatUserInfo = JSON.parseObject(str, WechatUserInfo.class);
+            JSONObject jsonObject = JSON.parseObject(str);
 
             String newOpenId = openIdMaping.getNewOpenId();
             newBuffer.setLength(0);
             String newKey = newBuffer.append(USER_PRE).append(newOpenId).toString();
             //替换openId
-            wechatUserInfo.setOpenId(openIdMaping.getNewOpenId());
-            String wechatUserInfoStr = JSON.toJSONString(wechatUserInfo);
+            jsonObject.put("openId", openIdMaping.getNewOpenId());
+            String wechatUserInfoStr = JSON.toJSONString(jsonObject);
             //插入新数据
             couchbaseClient.set(newKey, wechatUserInfoStr);
             couchbaseClient.delete(oldKey);
