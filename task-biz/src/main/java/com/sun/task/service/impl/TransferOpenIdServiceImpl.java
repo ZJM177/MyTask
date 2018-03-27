@@ -35,8 +35,8 @@ public class TransferOpenIdServiceImpl implements TransferOpenIdService {
 
     @Value("${custom.point.levels}")
     private String pointLevels;
-    @Value("${custom.book.subCampCode}")
-    private String subCampCode;
+    @Value("${custom.book.preSubCampCode}")
+    private String preSubCampCode;
     @Value("${custom.kf.days}")
     private int kfDays;
 
@@ -45,8 +45,6 @@ public class TransferOpenIdServiceImpl implements TransferOpenIdService {
 
     private final static String USER_PRE = "System:WechatUserInfo:";
     private final static String POINT_PRE = "1:SubCampIfJoin:";
-    private final static String RF_BOOK_PRE = "1:SubCampOrder:";
-    private final static String AVENE_BOOK_PRE = "1:SubCampInfo:";
 
     @Override
     public String transferFansOpenId(int start, int limit) {
@@ -127,14 +125,11 @@ public class TransferOpenIdServiceImpl implements TransferOpenIdService {
     }
 
     @Override
-    public String transferBookOpenId(int type, int start, int limit) {
+    public String transferBookOpenId(int start, int limit) {
         /**
          * avene docId格式 1:SubCampInfo:AS1512290000002:oPXa4uH6byCLVneO03FJwWPbnnQg
          * rf docId格式 1:SubCampOrder:AT1605110000001oCZUluNTz8sVqbsHRy61XG0Uo8hQ
          */
-        String bookPre = (type==TypeEnum.AVENE.getType())?AVENE_BOOK_PRE:RF_BOOK_PRE;
-        String subCampCode = (type==TypeEnum.AVENE.getType())?this.subCampCode+":":this.subCampCode;
-
         StringBuffer oldBuffer = new StringBuffer();
         StringBuffer newBuffer = new StringBuffer();
         List<OpenIdMaping> openIdMapingList = this.getOpenIdMapingList(start, limit);
@@ -142,7 +137,7 @@ public class TransferOpenIdServiceImpl implements TransferOpenIdService {
             int No = openIdMaping.getNo();
             String oldOpenId = openIdMaping.getOldOpenId();
             oldBuffer.setLength(0);
-            String oldKey = oldBuffer.append(bookPre).append(subCampCode).append(oldOpenId).toString();
+            String oldKey = oldBuffer.append(preSubCampCode).append(oldOpenId).toString();
             Object obj = couchbaseClient.get(oldKey);
             if(null == obj){
                 log.info(String.format("查询预约记录为空，将忽略此记录，openId：%s，排序值No：%s", oldOpenId, No));
@@ -150,7 +145,7 @@ public class TransferOpenIdServiceImpl implements TransferOpenIdService {
             }
             newBuffer.setLength(0);
             String newOpenId = openIdMaping.getNewOpenId();
-            String newKey = newBuffer.append(bookPre).append(subCampCode).append(newOpenId).toString();
+            String newKey = newBuffer.append(preSubCampCode).append(newOpenId).toString();
             couchbaseClient.set(newKey, obj);
             couchbaseClient.delete(oldKey);
             log.info(String.format("转换预约记录成功>>>，oldOpenId：%s，newOpenId：%s，排序值No：%s", oldOpenId, newOpenId, No));

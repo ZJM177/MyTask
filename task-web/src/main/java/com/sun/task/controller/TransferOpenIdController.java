@@ -71,13 +71,12 @@ public class TransferOpenIdController {
 
     @RequestMapping("/transferBookOpenId")
     @ResponseBody
-    public String transferBookOpenId(@RequestParam("type") int type,
-                                      @RequestParam("start") int start,
+    public String transferBookOpenId(@RequestParam("start") int start,
                                       @RequestParam("limit") int limit) {
         if (limit == 0) {
             return "本次失败，limit参数必须是正整数";
         }
-        return transferOpenIdService.transferBookOpenId(type, start, limit);
+        return transferOpenIdService.transferBookOpenId(start, limit);
     }
 
     @RequestMapping("/transferKfOpenId")

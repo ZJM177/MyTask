@@ -42,12 +42,11 @@ public interface TransferOpenIdService {
 
     /**
      * 转换预约记录openId
-     * @param type 区分雅漾和RF
      * @param start
      * @param limit
      * @return
      */
-    String transferBookOpenId(int type, int start, int limit);
+    String transferBookOpenId(int start, int limit);
 
     /**
      * 转换客服交流明细openId
