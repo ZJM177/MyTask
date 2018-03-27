@@ -6,7 +6,6 @@ import com.couchbase.client.CouchbaseClient;
 import com.google.common.collect.Lists;
 import com.sun.task.dao.OpenIdMapingDao;
 import com.sun.task.dto.OpenIdMaping;
-import com.sun.task.dto.WeChatQaMain;
 import com.sun.task.dto.WechatUserInfo;
 import com.sun.task.enums.TypeEnum;
 import com.sun.task.service.TransferOpenIdService;
@@ -22,7 +21,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 
 /**
  * Created by pengjikun on 2017/2/15.
