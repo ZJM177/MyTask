@@ -17,9 +17,7 @@ import java.util.Date;
 /**
  * Created by pengjikun on 2018/3/16.
  */
-@RunWith(SpringRunner.class)
-@SpringBootTest()
-public class CouchbaseTest {
+public class CouchbaseTest extends BaseTest{
 
     @Autowired
     private CouchbaseClient couchbaseClient;

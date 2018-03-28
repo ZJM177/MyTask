@@ -21,9 +21,7 @@ import java.util.Objects;
 /**
  * Created by pengjikun on 2018/3/16.
  */
-@RunWith(SpringRunner.class)
-@SpringBootTest()
-public class TransferOpenIdServiceTest {
+public class TransferOpenIdServiceTest extends BaseTest{
 
     @Autowired
     private TransferOpenIdService transferOpenIdService;
@@ -94,7 +92,7 @@ public class TransferOpenIdServiceTest {
     public void queryMockData(){
         String date2String = CommonUtil.date2String(new Date(), "yyyy-MM-dd");
         StringBuffer stf = new StringBuffer();
-        for (int i = 0; i < 50000; i++) {
+        for (int i = 0; i < 10; i++) {
             int c = i + 1;
             stf.setLength(0);
             String key = stf.append("1:WeChatQaMain:")

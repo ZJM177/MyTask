@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sun.task.dao.FanMigrateTempDao">
+    <sql id="select_all">
+        SELECT
+        id
+        ,appId
+        ,openId
+        ,newOpenId
+        ,createTime
+        ,updateTime
+        ,isDeleted
+        FROM t_fan_migrate_temp
+    </sql>
+    <insert id="create" parameterType="FanMigrateTemp" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO t_fan_migrate_temp(
+        appId,    openId,    newOpenId,    createTime,    updateTime,    isDeleted  )
+        VALUES(
+        #{appId},#{openId},#{newOpenId},#{createTime},#{updateTime},#{isDeleted})
+    </insert>
+
+    <select id="findById" parameterType="map" resultType="FanMigrateTemp">
+        <include refid="select_all"></include>
+        WHERE id = #{id} and isDeleted = 0
+    </select>
+
+    <delete id="delete" parameterType="map">
+        update `t_fan_migrate_temp` set isDeleted = 1 WHERE id =#{id}
+    </delete>
+
+    <update id="update" parameterType="FanMigrateTemp">
+        UPDATE  t_fan_migrate_temp
+        SET
+        appId = #{appId},   openId = #{openId},   newOpenId = #{newOpenId},    updateTime = #{updateTime},   isDeleted = #{isDeleted}
+        WHERE id = #{id}
+    </update>
+
+    <select id="queryByAppId" parameterType="map" resultType="java.lang.String">
+        SELECT
+          openId
+        FROM t_fan_migrate_temp
+        WHERE appId = #{appId}
+         limit #{start},#{limit}
+    </select>
+
+    <update id="updateByAppIdAndOpenId" parameterType="map">
+        update t_fan_migrate_temp set
+          newOpenId = #{newOpenId}
+        where appId = #{appId}
+        and openId = #{openId}
+    </update>
+
+    <update id="updateBatch" parameterType="map">
+        update t_fan_migrate_temp
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="newOpenId =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when openId=#{item.ori_openid} then #{item.new_openid}
+                </foreach>
+            </trim>
+        </trim>
+        where appId=#{appId} AND openId in
+        <foreach collection="list" index="index" item="item" separator="," open="(" close=")">
+            #{item.ori_openid}
+        </foreach>
+    </update>
+
+    <update id="updateStatus" parameterType="map">
+        update t_fan_migrate_temp set
+          isDeleted = 0
+        where appId = #{appId}
+        and openId = #{openId}
+    </update>
+    
+    <select id="queryCount" parameterType="map" resultType="int">
+        SELECT count(1) FROM t_fan_migrate_temp
+        WHERE appId = #{appId}
+    </select>
+
+    <select id="queryCountLimit" parameterType="map" resultType="int">
+        SELECT count(1) FROM
+            (SELECT id FROM t_fan_migrate_temp
+            WHERE appId = #{appId}
+            limit #{start},#{limit}) AS t
+    </select>
+</mapper>
