@@ -48,13 +48,13 @@ public class WxServiceImpl implements WxService {
             //最后一次循环
             if ((i + 100) >= openIdList.size()) {
                 List<String> sendOpenIdList = openIdList.subList(i, openIdList.size());
-//                List<FanMigrateResult> fanMigrateResultList = getNewOpenId(oldAppId, newAppId, sendOpenIdList);
-                List<FanMigrateResult> fanMigrateResultList = getNewOpenId_test(sendOpenIdList);
+                List<FanMigrateResult> fanMigrateResultList = getNewOpenId(oldAppId, newAppId, sendOpenIdList);
+//                List<FanMigrateResult> fanMigrateResultList = getNewOpenId_test(sendOpenIdList);
                 tempResult.addAll(fanMigrateResultList);
             } else {
                 List<String> sendOpenIdList = openIdList.subList(i, i + 100);
-//                List<FanMigrateResult> fanMigrateResultList = getNewOpenId(oldAppId, newAppId, sendOpenIdList);
-                List<FanMigrateResult> fanMigrateResultList = getNewOpenId_test(sendOpenIdList);
+                List<FanMigrateResult> fanMigrateResultList = getNewOpenId(oldAppId, newAppId, sendOpenIdList);
+//                List<FanMigrateResult> fanMigrateResultList = getNewOpenId_test(sendOpenIdList);
                 tempResult.addAll(fanMigrateResultList);
             }
 
