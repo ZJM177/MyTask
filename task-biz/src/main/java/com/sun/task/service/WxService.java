@@ -11,7 +11,7 @@ public interface WxService {
      * @param start
      * @param limit
      */
-    void transferOpenIdApi(String oldAppId, String newAppId, int start, int limit);
+    void transferOpenIdApi(String oldAppId, String newAppId, String newSecret, int start, int limit);
 
     void run(int i);
 
@@ -21,6 +21,6 @@ public interface WxService {
 
     String saveAccessToken(String newAppId,  String accessToken);
 
-    String getAccessToken(String newAppId);
+    String getAccessToken(String newAppId, String newSecret);
 
 }

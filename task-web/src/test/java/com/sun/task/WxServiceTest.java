@@ -41,7 +41,7 @@ public class WxServiceTest extends BaseTest {
         int count = 10000;
         int start = 0;
         for (int i = 0; i < poolSize; i++) {
-            wxService.transferOpenIdApi(oldAppId, "", start, count);
+            wxService.transferOpenIdApi(oldAppId, "", "", start, count);
             start += count;
         }
     }

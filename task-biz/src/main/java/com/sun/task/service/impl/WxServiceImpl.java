@@ -33,11 +33,13 @@ public class WxServiceImpl implements WxService {
     private CouchbaseClient couchbaseClient;
 
     public static final String CHANGE_OPENID_URL = "http://api.weixin.qq.com/cgi-bin/changeopenid?access_token=";
+    public static final String GET_TOKEN_URL = "https://api.weixin.qq.com/cgi-bin/token";
+
     public static final String APPID_ACCESS_TOKEN = "AccessToken:%s";
 
     @Override
     @Async
-    public void transferOpenIdApi(String oldAppId, String newAppId, int currentStart, int limit) {
+    public void transferOpenIdApi(String oldAppId, String newAppId, String newSecret, int currentStart, int limit) {
         List<String> openIdList = queryByAppIdInLimit(oldAppId, currentStart, limit);
         if(CollectionUtils.isEmpty(openIdList)){
             return;
@@ -48,13 +50,11 @@ public class WxServiceImpl implements WxService {
             //最后一次循环
             if ((i + 100) >= openIdList.size()) {
                 List<String> sendOpenIdList = openIdList.subList(i, openIdList.size());
-                List<FanMigrateResult> fanMigrateResultList = getNewOpenId(oldAppId, newAppId, sendOpenIdList);
-//                List<FanMigrateResult> fanMigrateResultList = getNewOpenId_test(sendOpenIdList);
+                List<FanMigrateResult> fanMigrateResultList = getNewOpenId(oldAppId, newAppId, newSecret, sendOpenIdList);
                 tempResult.addAll(fanMigrateResultList);
             } else {
                 List<String> sendOpenIdList = openIdList.subList(i, i + 100);
-                List<FanMigrateResult> fanMigrateResultList = getNewOpenId(oldAppId, newAppId, sendOpenIdList);
-//                List<FanMigrateResult> fanMigrateResultList = getNewOpenId_test(sendOpenIdList);
+                List<FanMigrateResult> fanMigrateResultList = getNewOpenId(oldAppId, newAppId, newSecret, sendOpenIdList);
                 tempResult.addAll(fanMigrateResultList);
             }
 
@@ -86,15 +86,26 @@ public class WxServiceImpl implements WxService {
 
     @Override
     public String saveAccessToken(String newAppId, String accessToken) {
-        couchbaseClient.set(String.format(APPID_ACCESS_TOKEN, newAppId), accessToken);
+        couchbaseClient.set(String.format(APPID_ACCESS_TOKEN, newAppId), 5400, accessToken);
         return "AccessToken保存成功！";
     }
 
     @Override
-    public String getAccessToken(String newAppId) {
+    public String getAccessToken(String newAppId, String newSecret) {
         String accessToken = (String) couchbaseClient.get(String.format(APPID_ACCESS_TOKEN, newAppId));
         if(StringUtils.isEmpty(accessToken)){
-            throw new RuntimeException("AccessToken为空");
+            //锁控制
+            synchronized (this.getClass()){
+                accessToken = (String) couchbaseClient.get(String.format(APPID_ACCESS_TOKEN, newAppId));
+                if(StringUtils.isEmpty(accessToken)){
+                    accessToken = getTokenApi(newAppId, newSecret);
+                    if(StringUtils.isEmpty(accessToken)){
+                        throw new RuntimeException("获取AccessToken为空");
+                    }
+                    //保存
+                    saveAccessToken(newAppId, accessToken);
+                }
+            }
         }
         return accessToken;
     }
@@ -106,11 +117,11 @@ public class WxServiceImpl implements WxService {
      * @param openIdList
      * @return
      */
-    private List<FanMigrateResult> getNewOpenId(String oldAppId, String newAppId, List<String> openIdList){
+    private List<FanMigrateResult> getNewOpenId(String oldAppId, String newAppId, String newSecret, List<String> openIdList){
         Map<String, Object> reqMap = Maps.newHashMap();
         reqMap.put("from_appid", oldAppId);
         reqMap.put("openid_list", openIdList);
-        String authAccessToken = getAccessToken(newAppId);
+        String authAccessToken = getAccessToken(newAppId, newSecret);
 
         Map<String, Object> map = okHttpUtil.requestAuthWechatAPI(authAccessToken, CHANGE_OPENID_URL, reqMap, "POST");
         List<FanMigrateResult> result_list = JSON.parseArray(Objects.toString(map.get("result_list")), FanMigrateResult.class);
@@ -140,6 +151,20 @@ public class WxServiceImpl implements WxService {
             return Lists.newArrayList();
         }
         return fanMigrateTemps;
+    }
+
+    private String getTokenApi(String appId, String secret){
+        StringBuffer sb = new StringBuffer();
+        String url = sb.append(GET_TOKEN_URL)
+                .append("?grant_type=client_credential&appid=")
+                .append(appId)
+                .append("&secret=")
+                .append(secret).toString();
+        Map<String, Object> map = okHttpUtil.requestByClient(url, "GET", null);
+        if(!CollectionUtils.isEmpty(map)){
+            return String.valueOf(map.get("access_token"));
+        }
+        return null;
     }
 
 }

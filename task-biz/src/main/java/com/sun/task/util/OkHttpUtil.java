@@ -78,7 +78,6 @@ public class OkHttpUtil implements InitializingBean {
      * @return
      */
     public Map<String, Object> requestAuthWechatAPI(String authAccessToken, String url, Map<String, Object> reqMap, String method) {
-        Map<String, Object> retMap = new HashMap<>();
         String reqUrl = url + authAccessToken;
         String req = null;
         if (!CollectionUtils.isEmpty(reqMap)) {
@@ -100,7 +99,7 @@ public class OkHttpUtil implements InitializingBean {
         }
     }
 
-    private Map<String, Object> requestByClient(String url, String method, String data) {
+    public Map<String, Object> requestByClient(String url, String method, String data) {
 
         String result = null;
         if ("POST".equalsIgnoreCase(method)) {
