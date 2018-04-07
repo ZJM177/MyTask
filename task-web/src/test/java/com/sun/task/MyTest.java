@@ -21,4 +21,11 @@ public class MyTest extends BasicTest{
         System.out.println(o);
     }
 
+    @Test
+    public void testAsync(){
+        for (int i = 0; i < 50; i++) {
+            testService.testAsync(i);
+        }
+    }
+
 }

@@ -4,6 +4,7 @@ import com.sun.task.dao.TestDao;
 import com.sun.task.service.TestService;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 /**
@@ -18,5 +19,11 @@ public class TestServiceImpl implements TestService {
     @Override
     public Object get(int id) {
         return testDao.selectById(id);
+    }
+
+    @Override
+    @Async
+    public void testAsync(int i) {
+        System.out.println(i);
     }
 }
