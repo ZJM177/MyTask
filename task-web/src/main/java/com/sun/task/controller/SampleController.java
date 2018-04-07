@@ -18,6 +18,11 @@ public class SampleController {
     @Autowired
     private TestService service;
 
+    @RequestMapping("/index")
+    public String index() {
+        return "index";
+    }
+
     @RequestMapping("/")
     @ResponseBody
     public String hello() {
