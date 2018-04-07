@@ -7,4 +7,11 @@ public interface TestService {
 
     Object get(int id);
 
+    /**
+     * 测试多线程异步执行
+     * @param i
+     * @return
+     */
+    void testAsync(int i);
+
 }
