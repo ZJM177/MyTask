@@ -23,15 +23,15 @@ public class SampleController {
     @Autowired
     private TestService service;
 
-    @RequestMapping("/index")
-    public String index() {
-        return "index";
-    }
-
     @RequestMapping("/")
     @ResponseBody
     public String hello() {
         return "Hello world!";
+    }
+
+    @RequestMapping("/index")
+    public String index() {
+        return "index";
     }
 
     @RequestMapping("/get")
@@ -40,6 +40,7 @@ public class SampleController {
         return service.get(id);
     }
 
+    //测试session共享，用两个不同端口启动该服务，然后在同一个浏览器上访问该url即可,验证：是否会返回相同的sessionId？
     @RequestMapping("/sessions")
     @ResponseBody
     public String sessions(HttpServletRequest request) {
