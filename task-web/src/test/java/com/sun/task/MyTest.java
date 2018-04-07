@@ -10,9 +10,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 /**
  * Created by pengjikun on 2018/3/16.
  */
-@RunWith(SpringRunner.class)
-@SpringBootTest()
-public class MyTest {
+public class MyTest extends BasicTest{
 
     @Autowired
     private TestService testService;
