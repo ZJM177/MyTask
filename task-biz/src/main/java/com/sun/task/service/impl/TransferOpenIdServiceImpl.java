@@ -243,9 +243,13 @@ public class TransferOpenIdServiceImpl implements TransferOpenIdService {
      */
     public String getNewOpenIdByOldOpenId(String oldOpenId){
         if(CollectionUtils.isEmpty(openIdMapingData)){
-            List<OpenIdMaping> openIdMapingList = getOpenIdMapingList();
-            for (OpenIdMaping openIdMaping : openIdMapingList) {
-                this.openIdMapingData.put(openIdMaping.getOldOpenId(), openIdMaping.getNewOpenId());
+            synchronized (this.getClass()){
+                if(CollectionUtils.isEmpty(openIdMapingData)){
+                    List<OpenIdMaping> openIdMapingList = getOpenIdMapingList();
+                    for (OpenIdMaping openIdMaping : openIdMapingList) {
+                        this.openIdMapingData.put(openIdMaping.getOldOpenId(), openIdMaping.getNewOpenId());
+                    }
+                }
             }
         }
         return openIdMapingData.get(oldOpenId);
