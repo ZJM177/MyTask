@@ -39,7 +39,7 @@ public class WxServiceImpl implements WxService {
 
     @Override
     @Async
-    public void transferOpenIdApi(String oldAppId, String newAppId, String newSecret, int currentStart, int limit) {
+    public void transferOpenIdApi(String thread, String oldAppId, String newAppId, String newSecret, int currentStart, int limit) {
         List<String> openIdList = queryByAppIdInLimit(oldAppId, currentStart, limit);
         if(CollectionUtils.isEmpty(openIdList)){
             return;
@@ -62,10 +62,15 @@ public class WxServiceImpl implements WxService {
             if(tempResult.size() >= 1000 || (i + 100) >= openIdList.size()){
                 log.info(String.format(">>>正在批量更新，本次范围：%s ~ %s", lastStart==0?currentStart:lastStart, currentStart + i + 100));
                 lastStart = currentStart + i + 100;
-                fanMigrateTempDao.updateBatch(oldAppId, tempResult);
+                try {
+                    fanMigrateTempDao.updateBatch(oldAppId, tempResult);
+                }catch (Exception e){
+                    log.error(String.format(">>>更新失败，本次范围：%s ~ %s", lastStart==0?currentStart:lastStart, currentStart + i + 100), e);
+                }
                 tempResult.clear();
             }
         }
+        log.info(String.format(">>>线程结束，%s", thread));
     }
 
     @Override

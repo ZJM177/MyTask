@@ -60,13 +60,13 @@ public class FanMigrateController {
                     currentLimit = restCount;
                 }
                 log.info(String.format(">>>正在分配线程，序号：%s，处理范围%s ~ %s", i, currentStart, currentStart + currentLimit));
-                wxService.transferOpenIdApi(oldAppId, newAppId, newSecret, currentStart, currentLimit);
+                wxService.transferOpenIdApi(String.valueOf(i), oldAppId, newAppId, newSecret, currentStart, currentLimit);
                 currentStart += currentLimit;
             }
         }else {
             //小于单个线程处理数的，直接启用一个线程执行
             log.info(String.format(">>>小于单个线程处理数，直接启用一个线程"));
-            wxService.transferOpenIdApi(oldAppId, newAppId, newSecret, start, limit);
+            wxService.transferOpenIdApi("单线程", oldAppId, newAppId, newSecret, start, limit);
         }
         return String.format(">>>旧openId转换新openId任务建立成功，正在努力执行，>>>start：%s，limit：%s，", start, limit);
     }
