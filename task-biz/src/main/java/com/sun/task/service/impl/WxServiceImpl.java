@@ -93,11 +93,11 @@ public class WxServiceImpl implements WxService {
     @Override
     public String getAccessToken(String newAppId, String newSecret) {
         String accessToken = (String) couchbaseClient.get(String.format(APPID_ACCESS_TOKEN, newAppId));
-        if(StringUtils.isEmpty(accessToken)){
+        if(StringUtils.isEmpty(accessToken) || "null".equals(accessToken)){
             //锁控制
             synchronized (this.getClass()){
                 accessToken = (String) couchbaseClient.get(String.format(APPID_ACCESS_TOKEN, newAppId));
-                if(StringUtils.isEmpty(accessToken)){
+                if(StringUtils.isEmpty(accessToken) || "null".equals(accessToken)){
                     accessToken = getTokenApi(newAppId, newSecret);
                     if(StringUtils.isEmpty(accessToken)){
                         throw new RuntimeException("获取AccessToken为空");
