@@ -61,12 +61,19 @@ public class WxServiceImpl implements WxService {
             //累计到1000条时或最后一次时，批量更新
             if(tempResult.size() >= 1000 || (i + 100) >= openIdList.size()){
                 log.info(String.format(">>>正在批量更新，本次范围：%s ~ %s", lastStart==0?currentStart:lastStart, currentStart + i + 100));
-                lastStart = currentStart + i + 100;
                 try {
                     fanMigrateTempDao.updateBatch(oldAppId, tempResult);
                 }catch (Exception e){
-                    log.error(String.format(">>>更新失败，本次范围：%s ~ %s", lastStart==0?currentStart:lastStart, currentStart + i + 100), e);
+                    log.error(String.format(">>>更新失败将重试，本次范围：%s ~ %s", lastStart==0?currentStart:lastStart, currentStart + i + 100), e);
+                    //重试
+                    try {
+                        Thread.sleep(1000L);
+                    } catch (InterruptedException e1) {
+                        e1.printStackTrace();
+                    }
+                    fanMigrateTempDao.updateBatch(oldAppId, tempResult);
                 }
+                lastStart = currentStart + i + 100;
                 tempResult.clear();
             }
         }

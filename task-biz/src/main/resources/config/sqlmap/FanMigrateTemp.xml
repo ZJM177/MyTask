@@ -41,7 +41,7 @@
         SELECT
           openId
         FROM t_fan_migrate_temp
-        WHERE appId = #{appId}
+         WHERE appId = #{appId}
          limit #{start},#{limit}
     </select>
 
